@@ -19,15 +19,20 @@ const action = process.argv[2] || 'start';
 const PORT_FILE = resolve(__dirname, '.dashboard-port');
 const DEFAULT_PORT = 3000;
 
+function getSavedInfo() {
+  if (!existsSync(PORT_FILE)) return null;
+  const raw = readFileSync(PORT_FILE, 'utf-8').trim();
+  try { return JSON.parse(raw); } catch {}
+  // Legacy format: just a port number
+  const port = parseInt(raw, 10);
+  return port ? { port } : null;
+}
+
 function getPort() {
-  // CLI arg > env var > saved port file > default
   const envPort = process.env.PORT;
   if (envPort) return parseInt(envPort, 10);
-  if (existsSync(PORT_FILE)) {
-    const saved = readFileSync(PORT_FILE, 'utf-8').trim();
-    if (saved) return parseInt(saved, 10);
-  }
-  return DEFAULT_PORT;
+  const saved = getSavedInfo();
+  return saved?.port || DEFAULT_PORT;
 }
 
 function isPortInUse(port) {
@@ -107,7 +112,7 @@ async function main() {
   for (let i = 0; i < 30; i++) {
     await new Promise(r => setTimeout(r, 300));
     if (await isPortInUse(port)) {
-      writeFileSync(PORT_FILE, String(port));
+      writeFileSync(PORT_FILE, JSON.stringify({ port, pid: child.pid, name: 'Career-Ops Dashboard' }));
       console.log(`Dashboard running at http://localhost:${port}`);
       console.log('Run job-prep-stop to shut it down.');
       process.exit(0);
