@@ -457,7 +457,7 @@ export default function AnthropicBrief() {
 
   return (
     <div className="min-h-screen text-white" style={{ background: "linear-gradient(160deg, #090909 0%, #0f0f0f 50%, #0a0a0a 100%)", fontFamily: "'IBM Plex Sans', sans-serif" }}>
-      <style>{`@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');.font-mono{font-family:'IBM Plex Mono',monospace}::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:2px}`}</style>
+      <style>{`@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');.brief-embed .font-mono{font-family:'IBM Plex Mono',monospace}.brief-embed ::-webkit-scrollbar{width:4px}.brief-embed ::-webkit-scrollbar-track{background:transparent}.brief-embed ::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:2px}`}</style>
       <div className="border-b border-white border-opacity-10 px-6 py-8">
         <div className="max-w-4xl mx-auto">
           <div className="flex items-center gap-2 mb-3">
