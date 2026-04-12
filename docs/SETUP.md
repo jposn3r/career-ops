@@ -73,8 +73,20 @@ node verify-pipeline.mjs     # Check pipeline integrity
 
 ## Build Dashboard (Optional)
 
+### Terminal TUI
+
 ```bash
 cd dashboard
 go build -o career-dashboard .
 ./career-dashboard --path ..  # Opens TUI pipeline viewer
 ```
+
+### Web Dashboard
+
+```bash
+cd dashboard/web
+npm install
+npm run dev                   # Opens at http://localhost:3000
+```
+
+The web dashboard reads your career-ops data files directly -- no sync step needed. It shows your evaluation reports, STAR interview stories, application pipeline, tailored resumes, and intelligence briefs in a visual interface. Works with empty data; evaluate your first offer to see content appear.
