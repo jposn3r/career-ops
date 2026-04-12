@@ -66,12 +66,24 @@ async function main() {
     process.exit(0);
   }
 
-  const port = process.env.PORT ? parseInt(process.env.PORT, 10) : DEFAULT_PORT;
+  // Check if dashboard is already running (saved port file)
+  if (existsSync(PORT_FILE)) {
+    const savedPort = parseInt(readFileSync(PORT_FILE, 'utf-8').trim(), 10);
+    if (savedPort && await isPortInUse(savedPort)) {
+      console.log(`Dashboard is already running at http://localhost:${savedPort}`);
+      process.exit(0);
+    }
+  }
 
-  // Check if already running
-  if (await isPortInUse(port)) {
-    console.log(`Dashboard is already running at http://localhost:${port}`);
-    process.exit(0);
+  // Find an open port starting from DEFAULT_PORT
+  let port = process.env.PORT ? parseInt(process.env.PORT, 10) : DEFAULT_PORT;
+  const maxPort = port + 10;
+  while (port <= maxPort && await isPortInUse(port)) {
+    port++;
+  }
+  if (port > maxPort) {
+    console.error(`No open port found between ${DEFAULT_PORT} and ${maxPort}.`);
+    process.exit(1);
   }
 
   // Check if node_modules exists
@@ -80,6 +92,9 @@ async function main() {
     execSync('npm install', { cwd: __dirname, stdio: 'inherit' });
   }
 
+  if (port !== DEFAULT_PORT) {
+    console.log(`Port ${DEFAULT_PORT} is in use, using ${port} instead.`);
+  }
   console.log(`Starting Career-Ops Dashboard on http://localhost:${port}...`);
   const child = spawn('node', [resolve(__dirname, 'node_modules/vite/bin/vite.js'), '--port', String(port), '--strictPort'], {
     cwd: __dirname,
