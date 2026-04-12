@@ -119,9 +119,14 @@ function RolePill({ role }) {
 function ActivityTab({ notes, onAddNote }) {
   const [text, setText] = useState("");
   const feedEnd = useRef(null);
+  const prevCount = useRef(notes.length);
 
   useEffect(() => {
-    feedEnd.current?.scrollIntoView({ behavior: "smooth" });
+    // Only auto-scroll when a new note is added, not on initial mount
+    if (notes.length > prevCount.current) {
+      feedEnd.current?.scrollIntoView({ behavior: "smooth" });
+    }
+    prevCount.current = notes.length;
   }, [notes.length]);
 
   const submit = () => {
@@ -647,17 +652,6 @@ export default function RoleDetail({ roles, tasks, notes, onAddNote, onAddTask, 
 
   const switchTab = (tabId) => {
     setSubTab(tabId);
-    // Scroll to top of content area on tab switch to prevent disorientation
-    requestAnimationFrame(() => {
-      const tabBar = contentRef.current;
-      if (tabBar) {
-        const rect = tabBar.getBoundingClientRect();
-        // Only scroll if tab bar is above the viewport (user scrolled down in previous tab)
-        if (rect.top < 100) {
-          tabBar.scrollIntoView({ behavior: 'instant', block: 'start' });
-        }
-      }
-    });
   };
   const role = roles.find((r) => r.id === id);
 
