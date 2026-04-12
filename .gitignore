@@ -41,3 +41,4 @@ package-lock.json
 # Web dashboard
 dashboard/web/node_modules/
 dashboard/web/dist/
+.dashboard-port
