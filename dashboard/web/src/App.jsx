@@ -261,9 +261,14 @@ function PlaceholderPage({ title }) {
 
 // ─── App ──────────────────────────────────────────────────────
 
+// Dashboard state is stored in data/dashboard-state.json (committed to git).
+// The Vite dev server exposes it at GET/POST /api/dashboard-state.
+// localStorage is used as a same-browser cache so refreshes feel instant
+// and the app keeps working if the API call hasn't returned yet.
 const STORAGE_KEY = "career-ops-dashboard-state-v1";
+const STATE_ENDPOINT = "/api/dashboard-state";
 
-function loadPersistedState() {
+function loadFromLocal() {
   if (typeof window === "undefined") return null;
   try {
     const raw = window.localStorage.getItem(STORAGE_KEY);
@@ -274,12 +279,37 @@ function loadPersistedState() {
   }
 }
 
-function persistState(state) {
+function saveToLocal(state) {
   if (typeof window === "undefined") return;
   try {
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
   } catch {
     // ignore quota / private-mode errors
+  }
+}
+
+async function loadFromServer() {
+  try {
+    const res = await fetch(STATE_ENDPOINT);
+    if (!res.ok) return null;
+    const data = await res.json();
+    // File can be {} if never written — guard for that.
+    if (!data || typeof data !== "object") return null;
+    return data;
+  } catch {
+    return null;
+  }
+}
+
+async function saveToServer(state) {
+  try {
+    await fetch(STATE_ENDPOINT, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(state),
+    });
+  } catch {
+    // Offline / API down — localStorage has our back.
   }
 }
 
@@ -296,14 +326,33 @@ function mergeTasks(defaults, overrides) {
 }
 
 export default function App() {
-  const persisted = loadPersistedState();
-  const [roles, setRoles] = useState(() => mergeRoles(ROLES, persisted?.roles));
-  const [tasks, setTasks] = useState(() => mergeTasks(INITIAL_TASKS, persisted?.tasks));
-  const [notes, setNotes] = useState(() => persisted?.notes || []);
+  const local = loadFromLocal();
+  const [roles, setRoles] = useState(() => mergeRoles(ROLES, local?.roles));
+  const [tasks, setTasks] = useState(() => mergeTasks(INITIAL_TASKS, local?.tasks));
+  const [notes, setNotes] = useState(() => local?.notes || []);
+  const [hydrated, setHydrated] = useState(false);
 
+  // On mount, hydrate from server (authoritative) and replace local cache.
   useEffect(() => {
-    persistState({ roles, tasks, notes });
-  }, [roles, tasks, notes]);
+    let cancelled = false;
+    loadFromServer().then((server) => {
+      if (cancelled || !server) { setHydrated(true); return; }
+      setRoles((prev) => mergeRoles(ROLES, server.roles || prev));
+      setTasks((prev) => mergeTasks(INITIAL_TASKS, server.tasks || prev));
+      setNotes(server.notes || []);
+      setHydrated(true);
+    });
+    return () => { cancelled = true; };
+  }, []);
+
+  // Debounced save: write to localStorage immediately, server after 500ms idle.
+  useEffect(() => {
+    if (!hydrated) return;
+    const state = { roles, tasks, notes };
+    saveToLocal(state);
+    const t = setTimeout(() => { saveToServer(state); }, 500);
+    return () => clearTimeout(t);
+  }, [roles, tasks, notes, hydrated]);
 
   const nextId = useRef(100);
   const genId = (prefix) => `${prefix}${nextId.current++}`;
