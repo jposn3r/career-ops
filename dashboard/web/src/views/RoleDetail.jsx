@@ -4,14 +4,11 @@ import { reportFiles, interviewFiles, storyBankRaw, pdfFiles } from "../lib/load
 import parseReport from "../lib/parse-report";
 import parseStoryBank from "../lib/parse-story-bank";
 import parseInterview from "../lib/parse-interview";
+import { ROLE_STATUSES, ROLE_STATUS_COLORS, ROLE_STATUS_LABELS } from "../lib/role-statuses";
 
 // ─── Constants ───────────────────────────────────────────────
 const STATUS_COLORS = {"not-started":"#4b5563","in-progress":"#f59e0b","complete":"#10b981"};
 const STATUS_LABELS = {"not-started":"Not Started","in-progress":"In Progress","complete":"Complete"};
-
-const ROLE_STATUSES = ["prep","research","watching","applied","interviewing"];
-const ROLE_STATUS_COLORS = { prep: "#10b981", research: "#f59e0b", watching: "#6b7280", applied: "#3b82f6", interviewing: "#8b5cf6" };
-const ROLE_STATUS_LABELS = { prep: "Prepping", research: "Researching", watching: "Watching", applied: "Applied", interviewing: "Interviewing" };
 
 // ─── Inline Components ───────────────────────────────────────
 const Pill = ({ color, children }) => (

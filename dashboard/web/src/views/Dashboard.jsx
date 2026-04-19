@@ -1,10 +1,15 @@
 import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { ROLE_STATUSES, ROLE_STATUS_COLORS, ROLE_STATUS_LABELS } from "../lib/role-statuses";
 
-const STATUS_COLORS = {"not-started":"#4b5563","in-progress":"#f59e0b","complete":"#10b981","applied":"#3b82f6","interviewing":"#8b5cf6","watching":"#6b7280","rejected":"#ef4444","not-interested":"#6b7280","closed":"#78716c","prep":"#10b981","research":"#f59e0b"};
-const STATUS_LABELS = {"not-started":"Not Started","in-progress":"In Progress","complete":"Complete","applied":"Applied","interviewing":"Interviewing","watching":"Watching","prep":"Prepping","research":"Researching","rejected":"Rejected","not-interested":"Not Interested","closed":"Closed"};
-const ROLE_STATUSES = ["prep","research","watching","applied","interviewing","rejected","not-interested","closed"];
+// Task statuses are dashboard-only (used for project/learning cards).
+const TASK_STATUS_COLORS = { "not-started":"#4b5563", "in-progress":"#f59e0b", "complete":"#10b981" };
+const TASK_STATUS_LABELS = { "not-started":"Not Started", "in-progress":"In Progress", "complete":"Complete" };
 const TASK_STATUSES = ["not-started","in-progress","complete"];
+
+// Merged view for components that render both role + task pills.
+const STATUS_COLORS = { ...TASK_STATUS_COLORS, ...ROLE_STATUS_COLORS };
+const STATUS_LABELS = { ...TASK_STATUS_LABELS, ...ROLE_STATUS_LABELS };
 
 const Tab = ({active,label,onClick,count}) => (
   <button onClick={onClick} className={`px-4 py-2 text-sm font-mono transition-all border-b-2 ${active ? "text-white border-amber-400" : "text-gray-500 border-transparent hover:text-gray-300"}`}>
