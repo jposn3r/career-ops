@@ -1,0 +1,85 @@
+# Career-Ops Profile Configuration
+# Source of truth for personal data across all modes.
+
+candidate:
+  full_name: "Jake Posner"
+  email: "hello@jakeposner.com"
+  phone: "+1-516-578-4028"
+  location: "New York, NY (Remote)"
+  linkedin: "linkedin.com/in/jake-posner"
+  portfolio_url: "https://roninventures.dev"
+  github: "github.com/jposn3r"
+  newsletter: "https://visionquest.news"
+
+target_roles:
+  primary:
+    - "Engineering Manager (Remote)"
+    - "Director of Engineering (Remote)"
+    - "Head of Engineering (Remote)"
+    - "Senior Product Manager (Remote)"
+    - "Principal Product Manager (Remote)"
+  archetypes:
+    - name: "Engineering Manager"
+      level: "Senior/Manager"
+      fit: "primary"
+    - name: "Director of Engineering"
+      level: "Director"
+      fit: "primary"
+    - name: "Product Manager (Technical / AI / Consumer)"
+      level: "Senior/Principal"
+      fit: "primary"
+    - name: "Head of Product"
+      level: "Director/VP"
+      fit: "secondary"
+    - name: "Staff/Senior Software Engineer"
+      level: "Senior/Staff"
+      fit: "adjacent"
+    - name: "Founding Engineer / Founding PM"
+      level: "Senior"
+      fit: "adjacent"
+
+narrative:
+  headline: "Product-minded engineering leader — 10 years shipping consumer products used by millions"
+  exit_story: >
+    Currently leading Quest OS Navigator at Meta Reality Labs, the highest-traffic
+    surface on Meta's spatial computing platform. Previously grew from IC to Director
+    of Engineering at fuboTV, scaling a 20+ person org and co-authoring company
+    product roadmap. Now looking for a remote leadership role at a company building
+    consumer or AI-native products at scale — ideally where I can keep blending
+    product thinking, hands-on technical work, and AI-accelerated engineering.
+  superpowers:
+    - "IC-to-Director range — can debug a crash or restructure a 20-person org"
+    - "0-to-1 consumer product development at platform scale (Quest OS, Roku, SmartTV)"
+    - "AI-native engineering practices — champion Claude Code and custom AI workflows across teams"
+    - "Cross-functional execution across 20+ partner teams and exec-level stakeholders"
+    - "Product + eng dual-fluency — write PRDs, set OKRs, and ship prototypes"
+  proof_points:
+    - name: "Quest OS Navigator"
+      url: "https://linkedin.com/in/jake-posner"
+      hero_metric: "Highest-traffic surface on Meta's spatial computing platform; features ship through Zuckerberg-level review"
+    - name: "fuboTV Roku platform"
+      url: "https://linkedin.com/in/jake-posner"
+      hero_metric: "Release cadence 5 weeks → weekly; crash rate 13% → 0.1%"
+    - name: "RoninVentures.dev"
+      url: "https://roninventures.dev"
+      hero_metric: "AI-accelerated projects across domains: Netflix clone, AV pathfinding, Iron Man VR"
+    - name: "VisionQuest.news"
+      url: "https://visionquest.news"
+      hero_metric: "Weekly newsletter on AI, spatial computing, robotics"
+
+compensation:
+  target_range: "$500K-600K total comp (base + bonus + equity)"
+  currency: "USD"
+  base_target: "$250K ideal, $225K minimum if role is great"
+  bonus_target: "10% minimum, 20% ideal"
+  equity: "Meaningful stock grant expected"
+  minimum: "$225K base + 10% bonus + equity if role is exceptional"
+  location_flexibility: "Remote-only (US). Open to quarterly offsites / travel for key planning."
+  notes: "Flexible on structure if company/role is a strong match \u2014 willing to trade base for equity at recognizable co. Meta EM comp = current benchmark."
+
+location:
+  country: "United States"
+  city: "New York"
+  timezone: "ET"
+  visa_status: "US citizen — no sponsorship needed"
+  remote_only: true
