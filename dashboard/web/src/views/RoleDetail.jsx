@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useMemo } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { reportFiles, interviewFiles, storyBankRaw, pdfFiles } from "../lib/loaders";
 import parseReport from "../lib/parse-report";
 import parseStoryBank from "../lib/parse-story-bank";
@@ -643,6 +643,9 @@ function ResumeTab({ role }) {
 export default function RoleDetail({ roles, tasks, notes, onAddNote, onAddTask, onUpdateTask, onUpdateRole, briefComponents }) {
   const { id } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
+  const backTo = location.state?.from || "/";
+  const backLabel = location.state?.label || "Command Center";
   const [subTab, setSubTab] = useState("brief");
   const [statusOpen, setStatusOpen] = useState(false);
   const contentRef = useRef(null);
@@ -657,8 +660,8 @@ export default function RoleDetail({ roles, tasks, notes, onAddNote, onAddTask, 
       <div className="min-h-screen flex items-center justify-center" style={{ background: "#070707" }}>
         <div className="text-center">
           <div className="text-gray-500 text-sm mb-4">Role not found</div>
-          <button onClick={() => navigate("/")} className="text-amber-400 text-sm font-mono hover:underline">
-            Back to Dashboard
+          <button onClick={() => navigate(backTo)} className="text-amber-400 text-sm font-mono hover:underline">
+            Back to {backLabel}
           </button>
         </div>
       </div>
@@ -700,10 +703,10 @@ export default function RoleDetail({ roles, tasks, notes, onAddNote, onAddTask, 
       >
         <div className="max-w-6xl mx-auto px-6 flex items-center gap-4" style={{ height: 48 }}>
           <button
-            onClick={() => navigate("/")}
+            onClick={() => navigate(backTo)}
             className="text-gray-500 hover:text-white transition-colors text-sm font-mono flex items-center gap-2"
           >
-            <span>←</span> Dashboard
+            <span>←</span> {backLabel}
           </button>
           <div className="w-px h-5 bg-white/10" />
           <div className="flex items-center gap-2">

@@ -107,8 +107,39 @@ function crossRoleScore(task) {
   return (roleCount * 10) + priBonus;
 }
 
+const RoleRow = ({ r, onUpdateRole }) => (
+  <div className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-lg p-3 hover:bg-white/[0.08] transition-colors">
+    <Link
+      to={`/role/${r.id}`}
+      state={{ from: "/", label: "Command Center" }}
+      className="flex items-center gap-3 flex-1 min-w-0 no-underline"
+      style={{textDecoration:"none"}}
+    >
+      <span className="text-gray-600 font-mono text-xs w-6">#{r.priority}</span>
+      <div className="w-2 h-2 rounded-full" style={{background:r.color}}/>
+      <div className="flex-1 min-w-0">
+        <div className="text-white text-sm font-medium truncate">{r.company} · {r.title}</div>
+        <div className="text-gray-500 text-xs">{r.comp} · {r.loc}</div>
+      </div>
+      <Pill color={parseInt(r.fit)>=85?"#10b981":parseInt(r.fit)>=60?"#f59e0b":"#ef4444"}>{r.fit} fit</Pill>
+    </Link>
+    <StatusDropdown current={r.status} options={ROLE_STATUSES} onChange={(s) => onUpdateRole(r.id, { status: s })} />
+  </div>
+);
+
+const SeeAllLink = () => (
+  <Link
+    to="/pipeline"
+    className="text-gray-500 hover:text-white text-xs font-mono mt-2 inline-block transition-colors"
+    style={{textDecoration:"none"}}
+  >
+    See all jobs →
+  </Link>
+);
+
 const Overview = ({roles,tasks,onUpdateTask,onUpdateRole}) => {
   const prepping = roles.filter(r=>r.status==="prep").length;
+  const applied = roles.filter(r=>r.status==="applied").length;
   const projects = tasks.filter(t=>t.type==="project");
   const learning = tasks.filter(t=>t.type==="learning");
   const projectsDone = projects.filter(p=>p.status==="complete").length;
@@ -117,13 +148,23 @@ const Overview = ({roles,tasks,onUpdateTask,onUpdateRole}) => {
   const topProjects = [...projects].sort((a,b) => crossRoleScore(b) - crossRoleScore(a)).slice(0, 6);
   const topLearning = [...learning].sort((a,b) => crossRoleScore(b) - crossRoleScore(a)).slice(0, 5);
 
+  // Two focused sections: top 5 applied (by fit) and top 5 non-applied by fit
+  const topApplied = roles
+    .filter(r => r.status === "applied")
+    .sort((a,b) => parseInt(b.fit) - parseInt(a.fit))
+    .slice(0, 5);
+  const topByFit = roles
+    .filter(r => r.status !== "applied")
+    .sort((a,b) => parseInt(b.fit) - parseInt(a.fit))
+    .slice(0, 5);
+
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         {[
           ["ROLES TRACKED", roles.length, "#f59e0b"],
+          ["APPLIED", applied, "#3b82f6"],
           ["PREPPING", prepping, "#10b981"],
-          ["PROJECTS", `${projectsDone}/${projects.length}`, "#3b82f6"],
           ["LEARNING", `${doneHours}/${totalHours} hrs`, "#8b5cf6"],
         ].map(([label,val,color])=>(
           <div key={label} className="bg-white/5 border border-white/10 rounded-lg p-4">
@@ -134,23 +175,31 @@ const Overview = ({roles,tasks,onUpdateTask,onUpdateRole}) => {
       </div>
 
       <div>
-        <div className="text-xs tracking-widest text-amber-400 font-mono mb-3">RANKED BY FIT</div>
-        <div className="space-y-2">
-          {[...roles].sort((a,b)=>parseInt(b.fit)-parseInt(a.fit)).map(r=>(
-            <div key={r.id} className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-lg p-3 hover:bg-white/[0.08] transition-colors">
-              <Link to={`/role/${r.id}`} className="flex items-center gap-3 flex-1 min-w-0 no-underline" style={{textDecoration:"none"}}>
-                <span className="text-gray-600 font-mono text-xs w-6">#{r.priority}</span>
-                <div className="w-2 h-2 rounded-full" style={{background:r.color}}/>
-                <div className="flex-1 min-w-0">
-                  <div className="text-white text-sm font-medium truncate">{r.company} · {r.title}</div>
-                  <div className="text-gray-500 text-xs">{r.comp} · {r.loc}</div>
-                </div>
-                <Pill color={parseInt(r.fit)>=85?"#10b981":parseInt(r.fit)>=60?"#f59e0b":"#ef4444"}>{r.fit} fit</Pill>
-              </Link>
-              <StatusDropdown current={r.status} options={ROLE_STATUSES} onChange={(s) => onUpdateRole(r.id, { status: s })} />
-            </div>
-          ))}
+        <div className="flex items-center justify-between mb-3">
+          <div className="text-xs tracking-widest text-blue-400 font-mono">TOP APPLIED</div>
+          <span className="text-gray-600 text-xs font-mono">{applied} total</span>
         </div>
+        {topApplied.length === 0 ? (
+          <div className="bg-white/5 border border-white/10 rounded-lg p-6 text-center">
+            <p className="text-gray-500 text-sm">No applications yet — mark a role as Applied to see it here.</p>
+          </div>
+        ) : (
+          <div className="space-y-2">
+            {topApplied.map(r => <RoleRow key={r.id} r={r} onUpdateRole={onUpdateRole} />)}
+          </div>
+        )}
+        <SeeAllLink />
+      </div>
+
+      <div>
+        <div className="flex items-center justify-between mb-3">
+          <div className="text-xs tracking-widest text-amber-400 font-mono">TOP BY FIT</div>
+          <span className="text-gray-600 text-xs font-mono">{roles.length - applied} not yet applied</span>
+        </div>
+        <div className="space-y-2">
+          {topByFit.map(r => <RoleRow key={r.id} r={r} onUpdateRole={onUpdateRole} />)}
+        </div>
+        <SeeAllLink />
       </div>
 
       {topProjects.length > 0 && <div>

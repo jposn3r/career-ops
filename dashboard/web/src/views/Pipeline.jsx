@@ -27,6 +27,7 @@ function Card({ role, onDragStart, onDragEnd, isDragging }) {
   return (
     <Link
       to={`/role/${role.id}`}
+      state={{ from: "/pipeline", label: "Pipeline" }}
       draggable
       onDragStart={(e) => {
         e.dataTransfer.effectAllowed = "move";
