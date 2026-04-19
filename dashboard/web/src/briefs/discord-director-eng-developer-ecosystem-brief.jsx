@@ -7,7 +7,7 @@ export const meta = {
   comp: "$400K–$450K + equity",
   fit: "91%",
   priority: 12,
-  status: "research",
+  status: "watching",
   loc: "SF Bay Area OR REMOTE",
   color: "#5865F2",
   tags: ["Director", "Developer Ecosystem", "Partner/Publisher", "Consumer", "Media"],

@@ -7,7 +7,7 @@ export const meta = {
   comp: "~$260K–$360K base + equity",
   fit: "85%",
   priority: 17,
-  status: "research",
+  status: "watching",
   loc: "Remote (US)",
   color: "#FF5C00",
   tags: ["Director", "Creator", "Media", "Music", "Remote"],
