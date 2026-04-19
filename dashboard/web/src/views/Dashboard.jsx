@@ -1,9 +1,9 @@
 import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 
-const STATUS_COLORS = {"not-started":"#4b5563","in-progress":"#f59e0b","complete":"#10b981","applied":"#3b82f6","interviewing":"#8b5cf6","watching":"#6b7280"};
-const STATUS_LABELS = {"not-started":"Not Started","in-progress":"In Progress","complete":"Complete","applied":"Applied","interviewing":"Interviewing","watching":"Watching","prep":"Prepping","research":"Researching"};
-const ROLE_STATUSES = ["prep","research","watching","applied","interviewing"];
+const STATUS_COLORS = {"not-started":"#4b5563","in-progress":"#f59e0b","complete":"#10b981","applied":"#3b82f6","interviewing":"#8b5cf6","watching":"#6b7280","rejected":"#ef4444","not-interested":"#6b7280","prep":"#10b981","research":"#f59e0b"};
+const STATUS_LABELS = {"not-started":"Not Started","in-progress":"In Progress","complete":"Complete","applied":"Applied","interviewing":"Interviewing","watching":"Watching","prep":"Prepping","research":"Researching","rejected":"Rejected","not-interested":"Not Interested"};
+const ROLE_STATUSES = ["prep","research","watching","applied","interviewing","rejected","not-interested"];
 const TASK_STATUSES = ["not-started","in-progress","complete"];
 
 const Tab = ({active,label,onClick,count}) => (
