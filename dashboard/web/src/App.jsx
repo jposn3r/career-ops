@@ -408,7 +408,7 @@ export default function App() {
         />
 
         {/* Career-ops views */}
-        <Route path="/pipeline" element={<div style={{ paddingTop: 52 }}><Pipeline /></div>} />
+        <Route path="/pipeline" element={<div style={{ paddingTop: 52 }}><Pipeline roles={roles} onUpdateRole={updateRole} /></div>} />
         <Route path="/stories" element={<div style={{ paddingTop: 52 }}><StoryBank /></div>} />
         <Route path="/reports" element={<div style={{ paddingTop: 52 }}><ReportList /></div>} />
         <Route path="/reports/:filename" element={<div style={{ paddingTop: 52 }}><ReportViewer /></div>} />
