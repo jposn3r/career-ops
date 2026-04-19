@@ -261,10 +261,49 @@ function PlaceholderPage({ title }) {
 
 // ─── App ──────────────────────────────────────────────────────
 
+const STORAGE_KEY = "career-ops-dashboard-state-v1";
+
+function loadPersistedState() {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = window.localStorage.getItem(STORAGE_KEY);
+    if (!raw) return null;
+    return JSON.parse(raw);
+  } catch {
+    return null;
+  }
+}
+
+function persistState(state) {
+  if (typeof window === "undefined") return;
+  try {
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  } catch {
+    // ignore quota / private-mode errors
+  }
+}
+
+function mergeRoles(defaults, overrides) {
+  if (!overrides) return defaults;
+  const byId = Object.fromEntries(overrides.map((r) => [r.id, r]));
+  return defaults.map((r) => ({ ...r, ...(byId[r.id] || {}) }));
+}
+
+function mergeTasks(defaults, overrides) {
+  if (!overrides) return defaults;
+  const byId = Object.fromEntries(overrides.map((t) => [t.id, t]));
+  return defaults.map((t) => ({ ...t, ...(byId[t.id] || {}) }));
+}
+
 export default function App() {
-  const [roles, setRoles] = useState(ROLES);
-  const [tasks, setTasks] = useState(INITIAL_TASKS);
-  const [notes, setNotes] = useState([]);
+  const persisted = loadPersistedState();
+  const [roles, setRoles] = useState(() => mergeRoles(ROLES, persisted?.roles));
+  const [tasks, setTasks] = useState(() => mergeTasks(INITIAL_TASKS, persisted?.tasks));
+  const [notes, setNotes] = useState(() => persisted?.notes || []);
+
+  useEffect(() => {
+    persistState({ roles, tasks, notes });
+  }, [roles, tasks, notes]);
 
   const nextId = useRef(100);
   const genId = (prefix) => `${prefix}${nextId.current++}`;
