@@ -7,7 +7,7 @@ export const meta = {
   comp: "~$140K–$220K base + bonus (level II — confirm)",
   fit: "72%",
   priority: 19,
-  status: "research",
+  status: "watching",
   loc: "San Diego, CA — NOT remote by default",
   color: "#003791",
   tags: ["PM", "Gaming", "Partner/Publisher", "Media", "Location-negotiate"],
@@ -31,6 +31,15 @@ export const meta = {
   url: "https://careers.playstation.com/product-manager-ii-partner-experiences/job/5781472004",
 };
 
-export const tasks = [];
+export const tasks = [
+  {
+    title: "Tailor CV for PlayStation Partner Experiences roles",
+    type: "project",
+    roles: ["playstation-pm-partner-experiences", "playstation-sr-tech-pm-partner-experiences"],
+    status: "not-started",
+    priority: "high",
+    desc: "Surface the platform-partner angle. (1) Rewrite Endeavor Streaming bullet to emphasize direct collaboration with Roku's partner engineering team for UFC/NBA/Univision deployments — certification, SDK constraints, Channel Store submission. (2) Add a new fuboTV bullet under 'Platform partner engineering' calling out trusted relationships with Roku/Samsung/LG/Vizio/Apple TV platform teams for SDK upgrades and store-cert flows. (3) Add a summary line: 'Experienced both as a platform builder (Quest OS Navigator at Meta) AND as a platform partner (shipped apps on Roku, Samsung, LG, Vizio, Apple TV while at fuboTV and Endeavor Streaming).' (4) Save as cv-playstation.md variant so the main cv.md stays general.",
+  },
+];
 
 export default function Brief() { return <MiniBrief meta={meta} />; }
